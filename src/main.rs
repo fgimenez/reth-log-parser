@@ -20,6 +20,8 @@ fn main() -> io::Result<()> {
     let mut mean = 0.0;
     let mut m2 = 0.0;
 
+    // use welford's algorithm to compute variance in one pass
+    // https://jonisalonen.com/2013/deriving-welfords-method-for-computing-variance/
     for line in reader.lines() {
         let line = line?;
         if let Some(caps) = elapsed_regex.captures(&line) {
