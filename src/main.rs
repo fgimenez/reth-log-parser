@@ -15,7 +15,7 @@ fn main() -> io::Result<()> {
     let file = File::open(path)?;
     let reader = BufReader::new(file);
 
-    let elapsed_regex = Regex::new(r"elapsed=(\d+\.\d+)(ms|s)").unwrap();
+    let elapsed_regex = Regex::new(r"Validated state root.*elapsed=(\d+\.\d+)(ms|s)").unwrap();
     let mut stats = Stats::new();
 
     for line in reader.lines() {
