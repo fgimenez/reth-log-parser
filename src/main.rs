@@ -82,7 +82,7 @@ impl Stats {
 
     fn print(&self) {
         println!(
-            "Average elapsed time = {:.3} s, Standard deviation = {:.3} s",
+            "  Average elapsed time = {:.3} s, Standard deviation = {:.3} s",
             self.mean,
             self.stddev()
         );
