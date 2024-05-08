@@ -1,8 +1,7 @@
 use eyre::Result;
-use log_parser::{process_log_line, Stats};
+use log_parser::LogProcessor;
 use regex::Regex;
 use std::{
-    collections::HashMap,
     env,
     fs::File,
     io::{BufRead, BufReader},
@@ -24,16 +23,15 @@ fn main() -> Result<()> {
         "state_root".to_string(),
         Regex::new(r"Validated state root.*elapsed=(\d+\.\d+)(ms|s)")?,
     )];
-
-    let mut computations: HashMap<String, Stats> = HashMap::new();
+    let mut processor = LogProcessor::new(regexes);
 
     for line in reader.lines() {
         let line = line?;
-        process_log_line(&line, &regexes, &mut computations);
+        processor.process_line(&line);
     }
 
     // Print results for each computation type
-    for (label, stats) in &computations {
+    for (label, stats) in processor.get_computations() {
         println!(
             "{}: Average elapsed time = {:.3} s, Standard deviation = {:.3} s",
             label,
