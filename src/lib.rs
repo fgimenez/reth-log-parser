@@ -1,3 +1,4 @@
+use eyre::Result;
 use regex::Regex;
 use std::collections::HashMap;
 
@@ -47,11 +48,11 @@ impl LogProcessor {
         }
     }
 
-    pub fn process_line(&mut self, line: &str) {
+    pub fn process_line(&mut self, line: &str) -> Result<()> {
         for (label, regex) in &self.regexes {
             if let Some(caps) = regex.captures(line) {
                 if let (Some(matched_value), Some(unit)) = (caps.get(1), caps.get(2)) {
-                    let mut elapsed: f64 = matched_value.as_str().parse().unwrap();
+                    let mut elapsed: f64 = matched_value.as_str().parse()?;
                     if unit.as_str() == "ms" {
                         elapsed /= 1000.0;
                     }
@@ -62,6 +63,7 @@ impl LogProcessor {
                 }
             }
         }
+        Ok(())
     }
 
     pub fn get_computations(&self) -> &HashMap<String, Stats> {
@@ -95,7 +97,7 @@ mod tests {
         ];
 
         for line in lines {
-            processor.process_line(line);
+            processor.process_line(line).unwrap();
         }
         let computations = processor.get_computations();
 

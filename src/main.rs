@@ -27,7 +27,7 @@ fn main() -> Result<()> {
 
     for line in reader.lines() {
         let line = line?;
-        processor.process_line(&line);
+        processor.process_line(&line)?;
     }
 
     // Print results for each computation type
