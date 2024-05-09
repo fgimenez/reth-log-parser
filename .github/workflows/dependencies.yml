@@ -5,12 +5,13 @@ name: Update Dependencies
 on:
   schedule:
     # Run weekly
-    - cron: "30 * * * *"
+    - cron: "0 * * * *"
   workflow_dispatch:
     # Needed so we can run it manually
 
 env:
   BRANCH: cargo-update
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   TITLE: "chore(deps): weekly `cargo update`"
   BODY: |
     Automation to keep dependencies in `Cargo.lock` current.
