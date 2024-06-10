@@ -1,7 +1,6 @@
 use eyre::Result;
 use log_parser::runner::Runner;
-use std::env;
-use std::io::stdout;
+use std::{env, io::stdout};
 
 fn main() -> Result<()> {
     let args: Vec<String> = env::args().collect();
