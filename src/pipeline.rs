@@ -121,7 +121,8 @@ mod tests {
 
         let output_str = String::from_utf8(output).unwrap();
         let expected_output =
-            format!("Pipeline 1: \n  Stage Headers: 60.00s\n  Total Pipeline Duration: 60.00s\n");
+            "Pipeline 1: \n  Stage Headers: 60.00s\n  Total Pipeline Duration: 60.00s\n"
+                .to_string();
         assert_eq!(expected_output, output_str);
     }
 }

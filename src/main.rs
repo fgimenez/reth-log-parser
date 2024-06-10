@@ -1,13 +1,7 @@
 use eyre::Result;
-use log_parser::log_processor::LogProcessor;
-use rayon::{prelude::*, ThreadPoolBuilder};
-use std::{
-    env,
-    fs::File,
-    io::{stdout, BufRead, BufReader},
-    path::Path,
-    sync::Arc,
-};
+use log_parser::runner::Runner;
+use std::env;
+use std::io::stdout;
 
 fn main() -> Result<()> {
     let args: Vec<String> = env::args().collect();
@@ -16,35 +10,17 @@ fn main() -> Result<()> {
         return Ok(());
     }
 
-    // Configure the number of threads in the global rayon thread pool
-    ThreadPoolBuilder::new().num_threads(4).build_global()?; // Adjust the number of threads as needed
+    let log_file = &args[1];
 
-    let path = Path::new(&args[1]);
-    let file = File::open(path)?;
-    let reader = BufReader::new(file);
+    let stdout_writer = stdout();
 
-    let processor = Arc::new(LogProcessor::new()?);
+    let mut runner = Runner::builder()
+        .with_log_file(log_file)
+        .with_threads(4)
+        .with_stdout_writer(stdout_writer)
+        .build()?;
 
-    reader.lines().par_bridge().for_each(|line| {
-        if let Ok(line) = line {
-            let processor = Arc::clone(&processor);
-            processor.process_line(&line).unwrap_or_else(|err| {
-                eprintln!("Error processing line: {}", err);
-            });
-        }
-    });
-
-    // Capture the last pipeline if it was still in progress
-    {
-        let mut pipelines = processor.pipelines.lock().unwrap();
-        let mut current_pipeline = processor.current_pipeline.lock().unwrap();
-        if let Some(pipeline) = current_pipeline.take() {
-            pipelines.push(pipeline);
-        }
-    }
-
-    let mut stdout_writer = stdout();
-    processor.print_summary(&mut stdout_writer);
+    runner.run()?;
 
     Ok(())
 }
