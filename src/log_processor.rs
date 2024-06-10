@@ -88,12 +88,12 @@ impl LogProcessor {
         Ok(SystemTime::from(dt))
     }
 
-    pub fn print_summary(&self) {
+    pub fn print_summary<W: std::io::Write>(&self, writer: &mut W) {
         let pipelines = self.pipelines.lock().unwrap();
         let mut total_duration = Duration::new(0, 0);
 
         for (index, pipeline) in pipelines.iter().enumerate() {
-            pipeline.print_summary(index);
+            pipeline.print_summary(index, writer);
             total_duration += pipeline.durations.values().sum::<Duration>();
         }
 

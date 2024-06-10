@@ -4,7 +4,7 @@ use rayon::{prelude::*, ThreadPoolBuilder};
 use std::{
     env,
     fs::File,
-    io::{BufRead, BufReader},
+    io::{stdout, BufRead, BufReader},
     path::Path,
     sync::Arc,
 };
@@ -43,8 +43,8 @@ fn main() -> Result<()> {
         }
     }
 
-    // Print the summary of each pipeline and the total aggregate duration
-    processor.print_summary();
+    let mut stdout_writer = stdout();
+    processor.print_summary(&mut stdout_writer);
 
     Ok(())
 }
