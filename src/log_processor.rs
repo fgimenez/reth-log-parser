@@ -97,7 +97,7 @@ impl LogProcessor {
             total_duration += pipeline.durations.values().sum::<Duration>();
         }
 
-        println!("Total Aggregate Duration: {:.2?}", total_duration);
+        writeln!(writer, "Total Aggregate Duration: {:.2?}", total_duration).unwrap();
     }
 }
 
@@ -121,6 +121,7 @@ mod tests {
 
         processor.process_line(line).unwrap();
 
+        let _pipelines = processor.pipelines.lock().unwrap();
         let current_pipeline = processor.current_pipeline.lock().unwrap();
 
         assert!(current_pipeline.is_some());
@@ -140,6 +141,7 @@ mod tests {
         processor.process_line(start_line).unwrap();
         processor.process_line(end_line).unwrap();
 
+        let _pipelines = processor.pipelines.lock().unwrap();
         let current_pipeline = processor.current_pipeline.lock().unwrap();
 
         assert!(current_pipeline.is_some());
@@ -176,12 +178,22 @@ mod tests {
         processor.process_line(start_line).unwrap();
         processor.process_line(end_line).unwrap();
 
+        // Finalize the last pipeline by pushing it to pipelines
+        {
+            let mut pipelines = processor.pipelines.lock().unwrap();
+            let mut current_pipeline = processor.current_pipeline.lock().unwrap();
+            if let Some(pipeline) = current_pipeline.take() {
+                pipelines.push(pipeline);
+            }
+        }
+
         let mut output = Cursor::new(Vec::new());
         processor.print_summary(&mut output);
 
         let output_str = String::from_utf8(output.into_inner()).unwrap();
 
         assert!(output_str.contains("Pipeline 1:"));
+        assert!(output_str.contains("Stage Headers:"));
         assert!(output_str.contains("Total Pipeline Duration:"));
     }
 }
