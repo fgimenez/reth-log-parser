@@ -100,3 +100,88 @@ impl LogProcessor {
         println!("Total Aggregate Duration: {:.2?}", total_duration);
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::io::Cursor;
+
+    #[test]
+    fn test_log_processor_new() {
+        let processor = LogProcessor::new().unwrap();
+        assert!(processor.regexes.contains_key("start"));
+        assert!(processor.regexes.contains_key("end"));
+        assert!(processor.regexes.contains_key("state_root"));
+    }
+
+    #[test]
+    fn test_process_line_start_stage() {
+        let processor = LogProcessor::new().unwrap();
+        let line = "2024-06-07T09:05:20.873354Z  INFO Preparing stage pipeline_stages=1/12 stage=Headers checkpoint=20037711 target=None";
+
+        processor.process_line(line).unwrap();
+
+        let current_pipeline = processor.current_pipeline.lock().unwrap();
+
+        assert!(current_pipeline.is_some());
+        assert!(current_pipeline
+            .as_ref()
+            .unwrap()
+            .stages
+            .contains_key("Headers"));
+    }
+
+    #[test]
+    fn test_process_line_end_stage() {
+        let processor = LogProcessor::new().unwrap();
+        let start_line = "2024-06-07T09:05:20.873354Z  INFO Preparing stage pipeline_stages=1/12 stage=Headers checkpoint=20037711 target=None";
+        let end_line = "2024-06-07T09:06:20.873354Z  INFO Finished stage pipeline_stages=1/12 stage=Headers checkpoint=20038569 target=None stage_progress=100.00%";
+
+        processor.process_line(start_line).unwrap();
+        processor.process_line(end_line).unwrap();
+
+        let current_pipeline = processor.current_pipeline.lock().unwrap();
+
+        assert!(current_pipeline.is_some());
+        assert!(current_pipeline
+            .as_ref()
+            .unwrap()
+            .durations
+            .contains_key("Headers"));
+    }
+
+    #[test]
+    fn test_process_line_state_root() {
+        let processor = LogProcessor::new().unwrap();
+        let line = "Validated state root elapsed=2.5s";
+
+        processor.process_line(line).unwrap();
+
+        let current_pipeline = processor.current_pipeline.lock().unwrap();
+
+        assert!(current_pipeline.is_some());
+        assert!(current_pipeline
+            .as_ref()
+            .unwrap()
+            .stats
+            .contains_key("state_root"));
+    }
+
+    #[test]
+    fn test_print_summary() {
+        let processor = LogProcessor::new().unwrap();
+        let start_line = "2024-06-07T09:05:20.873354Z  INFO Preparing stage pipeline_stages=1/12 stage=Headers checkpoint=20037711 target=None";
+        let end_line = "2024-06-07T09:06:20.873354Z  INFO Finished stage pipeline_stages=1/12 stage=Headers checkpoint=20038569 target=None stage_progress=100.00%";
+
+        processor.process_line(start_line).unwrap();
+        processor.process_line(end_line).unwrap();
+
+        let mut output = Cursor::new(Vec::new());
+        processor.print_summary(&mut output);
+
+        let output_str = String::from_utf8(output.into_inner()).unwrap();
+
+        assert!(output_str.contains("Pipeline 1:"));
+        assert!(output_str.contains("Total Pipeline Duration:"));
+    }
+}
