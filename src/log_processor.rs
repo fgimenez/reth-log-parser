@@ -172,11 +172,28 @@ mod tests {
     #[test]
     fn test_print_summary() {
         let processor = LogProcessor::new().unwrap();
-        let start_line = "2024-06-07T09:05:20.873354Z  INFO Preparing stage pipeline_stages=1/12 stage=Headers checkpoint=20037711 target=None";
-        let end_line = "2024-06-07T09:06:20.873354Z  INFO Finished stage pipeline_stages=1/12 stage=Headers checkpoint=20038569 target=None stage_progress=100.00%";
+        let stages = [
+            "Headers",
+            "Bodies",
+            "Receipts",
+            "Senders",
+            "Execution",
+            "HashState",
+            "IntermediateHashes",
+            "AccountHashing",
+            "StorageHashing",
+            "MerkleTrie",
+            "Finalization",
+            "Refinement",
+        ];
 
-        processor.process_line(start_line).unwrap();
-        processor.process_line(end_line).unwrap();
+        for (i, stage) in stages.iter().enumerate() {
+            let start_line = format!("2024-06-07T09:{:02}:00.000000Z  INFO Preparing stage pipeline_stages={}/12 stage={} checkpoint=20037711 target=None", i, i+1, stage);
+            let end_line = format!("2024-06-07T09:{:02}:30.000000Z  INFO Finished stage pipeline_stages={}/12 stage={} checkpoint=20038569 target=None stage_progress=100.00%", i, i+1, stage);
+
+            processor.process_line(&start_line).unwrap();
+            processor.process_line(&end_line).unwrap();
+        }
 
         // Finalize the last pipeline by pushing it to pipelines
         {
@@ -193,7 +210,9 @@ mod tests {
         let output_str = String::from_utf8(output.into_inner()).unwrap();
 
         assert!(output_str.contains("Pipeline 1:"));
-        assert!(output_str.contains("Stage Headers:"));
+        for stage in stages.iter() {
+            assert!(output_str.contains(&format!("Stage {}:", stage)));
+        }
         assert!(output_str.contains("Total Pipeline Duration:"));
     }
 }
