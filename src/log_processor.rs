@@ -17,7 +17,7 @@ impl LogProcessor {
     pub fn new() -> Result<Self> {
         let regexes = vec![
             ("start".to_string(), Regex::new(r"Preparing stage pipeline_stages=\d+/\d+ stage=(\w+) checkpoint=\d+ target=")?),
-            ("end".to_string(), Regex::new(r"Finished stage pipeline_stages=\d+/\d+ stage=(\w+) checkpoint=\d+ target=None stage_progress=100.00%")?),
+            ("end".to_string(), Regex::new(r"Finished stage pipeline_stages=\d+/\d+ stage=(\w+) checkpoint=\d+ target=.* stage_progress=100.00%")?),
             ("state_root".to_string(), Regex::new(r"Validated state root.*elapsed=(\d+\.\d+)(ms|s)")?),
         ].into_iter().collect();
 
@@ -136,7 +136,7 @@ mod tests {
     fn test_process_line_end_stage() {
         let processor = LogProcessor::new().unwrap();
         let start_line = "2024-06-07T09:05:20.873354Z  INFO Preparing stage pipeline_stages=1/12 stage=Headers checkpoint=20037711 target=None";
-        let end_line = "2024-06-07T09:06:20.873354Z  INFO Finished stage pipeline_stages=1/12 stage=Headers checkpoint=20038569 target=None stage_progress=100.00%";
+        let end_line = "2024-06-07T09:06:20.873354Z  INFO Finished stage pipeline_stages=1/12 stage=Headers checkpoint=20038569 target=344353 stage_progress=100.00%";
 
         processor.process_line(start_line).unwrap();
         processor.process_line(end_line).unwrap();
