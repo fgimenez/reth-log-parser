@@ -144,7 +144,7 @@ mod tests {
             .as_ref()
             .unwrap()
             .durations
-            .contains_key("Headers"));
+            .contains_key("1 - Headers"));
     }
 
     #[test]
@@ -210,8 +210,8 @@ mod tests {
         let output_str = String::from_utf8(output.into_inner()).unwrap();
 
         assert!(output_str.contains("Pipeline 1:"));
-        for stage in stages.iter() {
-            assert!(output_str.contains(&format!("Stage {}:", stage)));
+        for (index, stage) in stages.iter().enumerate() {
+            assert!(output_str.contains(&format!("Stage {} - {}:", index + 1, stage)));
         }
         assert!(output_str.contains("Total Pipeline Duration:"));
     }

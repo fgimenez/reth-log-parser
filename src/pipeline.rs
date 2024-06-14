@@ -96,6 +96,7 @@ mod tests {
     fn test_record_stage_end() -> Result<()> {
         let mut pipeline = Pipeline::new();
         let stage_name = "Headers";
+        let name = "1 - Headers";
         let start_time = SystemTime::now();
         let end_time = start_time + Duration::from_secs(60); // 1 minute later
 
@@ -103,8 +104,8 @@ mod tests {
         pipeline.record_stage_end(stage_name, end_time)?;
 
         assert_eq!(pipeline.durations.len(), 1);
-        assert!(pipeline.durations.contains_key(stage_name));
-        assert_eq!(pipeline.durations[stage_name], Duration::from_secs(60));
+        assert!(pipeline.durations.contains_key(name));
+        assert_eq!(pipeline.durations[name], Duration::from_secs(60));
         Ok(())
     }
 
@@ -136,7 +137,7 @@ mod tests {
 
         let output_str = String::from_utf8(output).unwrap();
         let expected_output =
-            "Pipeline 1: \n  Stage Headers: 60.00s\n  Total Pipeline Duration: 60.00s\n"
+            "Pipeline 1: \n  Stage 1 - Headers: 60.00s\n  Total Pipeline Duration: 60.00s\n"
                 .to_string();
         assert_eq!(expected_output, output_str);
     }
