@@ -1,4 +1,4 @@
-#[derive(Default)]
+#[derive(Default, Clone)]
 pub struct Stats {
     pub count: usize,
     pub mean: f64,

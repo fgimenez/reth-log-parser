@@ -1,11 +1,12 @@
 use crate::stats;
 use eyre::Result;
+use log::debug;
 use std::{
     collections::HashMap,
     time::{Duration, SystemTime},
 };
 
-#[derive(Default)]
+#[derive(Default, Clone)]
 pub struct Pipeline {
     pub stages: HashMap<String, (SystemTime, Option<SystemTime>)>,
     pub durations: HashMap<String, Duration>,
@@ -15,6 +16,10 @@ pub struct Pipeline {
 impl Pipeline {
     pub fn new() -> Self {
         Self::default()
+    }
+
+    fn enumerated_stage_name(&self, stage_name: &str) -> String {
+        format!("{} - {}", self.stages.len(), stage_name)
     }
 
     pub fn record_stage_start(&mut self, stage_name: &str, timestamp: SystemTime) {
@@ -27,9 +32,11 @@ impl Pipeline {
     pub fn record_stage_end(&mut self, stage_name: &str, timestamp: SystemTime) -> Result<()> {
         if let Some((start_time, _)) = self.stages.get_mut(stage_name) {
             let duration = timestamp.duration_since(*start_time)?;
-            self.durations.insert(stage_name.to_string(), duration);
+            let name = self.enumerated_stage_name(stage_name);
+            debug!("inserting duration for {name}");
+            self.durations.insert(name.clone(), duration);
             self.stats
-                .entry(stage_name.to_string())
+                .entry(name)
                 .or_default()
                 .update(duration.as_secs_f64());
         }
@@ -45,8 +52,18 @@ impl Pipeline {
 
     pub fn print_summary<W: std::io::Write>(&self, index: usize, writer: &mut W) {
         writeln!(writer, "Pipeline {}: ", index + 1).unwrap();
-        for (stage, duration) in &self.durations {
-            writeln!(writer, "  Stage {}: {:.2?}", stage, duration).unwrap();
+
+        let mut keys: Vec<&String> = self.durations.keys().collect();
+        keys.sort();
+
+        for key in keys {
+            writeln!(
+                writer,
+                "  Stage {}: {:.2?}",
+                key,
+                self.durations.get(key).unwrap()
+            )
+            .unwrap();
         }
         writeln!(
             writer,

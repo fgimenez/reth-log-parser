@@ -4,7 +4,6 @@ use std::{
     fs::File,
     io::{BufRead, BufReader, Write},
     path::Path,
-    sync::Arc,
 };
 
 pub struct Runner<W: Write> {
@@ -22,11 +21,10 @@ impl<W: Write> Runner<W> {
         let file = File::open(path)?;
         let reader = BufReader::new(file);
 
-        let processor = Arc::new(LogProcessor::new()?);
+        let mut processor = LogProcessor::new()?;
 
         reader.lines().for_each(|line| {
             if let Ok(line) = line {
-                let processor = Arc::clone(&processor);
                 processor.process_line(&line).unwrap_or_else(|err| {
                     eprintln!("Error processing line: {}", err);
                 });
@@ -35,10 +33,10 @@ impl<W: Write> Runner<W> {
 
         // Capture the last pipeline if it was still in progress
         {
-            let mut pipelines = processor.pipelines.lock().unwrap();
-            let mut current_pipeline = processor.current_pipeline.lock().unwrap();
-            if let Some(pipeline) = current_pipeline.take() {
-                pipelines.push(pipeline);
+            let pipelines = &mut processor.pipelines;
+            let current_pipeline = &processor.current_pipeline;
+            if let Some(pipeline) = current_pipeline {
+                pipelines.push(pipeline.clone());
             }
         }
 
