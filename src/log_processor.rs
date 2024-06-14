@@ -241,14 +241,20 @@ mod tests {
         ];
 
         // Generate log lines
-        let log_lines: Vec<String> = stages.iter().enumerate().flat_map(|(i, stage)| {
-            vec![
+        let log_lines: Vec<(String, String)> = stages.iter().enumerate().map(|(i, stage)| {
+            (
                 format!("2024-06-07T09:{:02}:00.000000Z  INFO Preparing stage pipeline_stages={}/12 stage={} checkpoint=20037711 target=None", i, i+1, stage),
-                format!("2024-06-07T09:{:02}:30.000000Z  INFO Finished stage pipeline_stages={}/12 stage={} checkpoint=20038569 target=None stage_progress=100.00%", i, i+1, stage)
-            ]
+                format!("2024-06-07T09:{:02}:30.000000Z  INFO Finished stage pipeline_stages={}/12 stage={} checkpoint=20038569 target=None stage_progress=100.00%", i, i+1, stage),
+            )
         }).collect();
 
-        // Process lines concurrently
+        // Flatten the log lines into a single vector
+        let log_lines: Vec<String> = log_lines
+            .into_iter()
+            .flat_map(|(start, end)| vec![start, end])
+            .collect();
+
+        // Process lines concurrently with the correct order
         log_lines.par_iter().for_each(|line| {
             processor.process_line(line).unwrap();
         });
