@@ -14,11 +14,7 @@ pub struct Pipeline {
 
 impl Pipeline {
     pub fn new() -> Self {
-        Pipeline {
-            stages: HashMap::new(),
-            durations: HashMap::new(),
-            stats: HashMap::new(),
-        }
+        Self::default()
     }
 
     pub fn record_stage_start(&mut self, stage_name: &str, timestamp: SystemTime) {
