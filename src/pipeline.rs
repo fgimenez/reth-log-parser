@@ -1,4 +1,4 @@
-use crate::stats;
+use crate::{stats, time::Formatter};
 use eyre::Result;
 use log::debug;
 use std::{
@@ -61,31 +61,16 @@ impl Pipeline {
                 writer,
                 "  Stage {}: {}",
                 key,
-                Pipeline::format_duration(self.durations.get(key).unwrap())
+                Formatter::format_duration(self.durations.get(key).unwrap())
             )
             .unwrap();
         }
         writeln!(
             writer,
             "  Total Pipeline Duration: {}",
-            Pipeline::format_duration(&self.durations.values().cloned().sum())
+            Formatter::format_duration(&self.durations.values().cloned().sum())
         )
         .unwrap();
-    }
-
-    fn format_duration(duration: &Duration) -> String {
-        let secs = duration.as_secs();
-        if secs >= 3600 {
-            let hours = secs / 3600;
-            let minutes = (secs % 3600) / 60;
-            format!("{}h {}m", hours, minutes)
-        } else if secs >= 60 {
-            let minutes = secs / 60;
-            let seconds = secs % 60;
-            format!("{}m {}s", minutes, seconds)
-        } else {
-            format!("{}s", secs)
-        }
     }
 }
 
@@ -195,13 +180,5 @@ mod tests {
         assert_eq!(pipeline.stages.len(), 1);
         assert!(pipeline.stages.contains_key(stage_name));
         assert_eq!(pipeline.stages[stage_name], (first_timestamp, None));
-    }
-
-    #[test]
-    fn test_format_duration() {
-        assert_eq!(Pipeline::format_duration(&Duration::new(59, 0)), "59s");
-        assert_eq!(Pipeline::format_duration(&Duration::new(61, 0)), "1m 1s");
-        assert_eq!(Pipeline::format_duration(&Duration::new(3601, 0)), "1h 0m");
-        assert_eq!(Pipeline::format_duration(&Duration::new(3661, 0)), "1h 1m");
     }
 }

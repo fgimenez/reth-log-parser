@@ -32,12 +32,10 @@ impl<W: Write> Runner<W> {
         });
 
         // Capture the last pipeline if it was still in progress
-        {
-            let pipelines = &mut processor.pipelines;
-            let current_pipeline = &processor.current_pipeline;
-            if let Some(pipeline) = current_pipeline {
-                pipelines.push(pipeline.clone());
-            }
+        let pipelines = &mut processor.pipelines;
+        let current_pipeline = &processor.current_pipeline;
+        if let Some(pipeline) = current_pipeline {
+            pipelines.push(pipeline.clone());
         }
 
         processor.print_summary(&mut self.stdout_writer);

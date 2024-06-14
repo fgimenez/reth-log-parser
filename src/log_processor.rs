@@ -1,4 +1,4 @@
-use crate::pipeline::Pipeline;
+use crate::{pipeline::Pipeline, time::Formatter};
 use eyre::Result;
 use regex::Regex;
 use std::{
@@ -108,7 +108,12 @@ impl LogProcessor {
             total_duration += pipeline.durations.values().sum::<Duration>();
         }
 
-        writeln!(writer, "Total Aggregate Duration: {:.2?}", total_duration).unwrap();
+        writeln!(
+            writer,
+            "Total Aggregate Duration: {}",
+            Formatter::format_duration(&total_duration)
+        )
+        .unwrap();
     }
 }
 
@@ -213,10 +218,8 @@ mod tests {
         processor.process_line(additional_end_line).unwrap();
 
         // Finalize the last pipeline by pushing it to pipelines
-        {
-            if let Some(pipeline) = processor.current_pipeline.take() {
-                processor.pipelines.push(pipeline);
-            }
+        if let Some(pipeline) = processor.current_pipeline.take() {
+            processor.pipelines.push(pipeline);
         }
 
         let mut output = Cursor::new(Vec::new());
