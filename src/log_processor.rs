@@ -15,10 +15,25 @@ pub struct LogProcessor {
 impl LogProcessor {
     pub fn new() -> Result<Self> {
         let regexes = vec![
-            ("start".to_string(), Regex::new(r"Preparing stage pipeline_stages=\d+/\d+ stage=(\w+) checkpoint=\d+ target=")?),
-            ("end".to_string(), Regex::new(r"Finished stage pipeline_stages=\d+/\d+ stage=(\w+) checkpoint=\d+ target=.* stage_progress=100.00%")?),
-            ("state_root".to_string(), Regex::new(r"Validated state root.*elapsed=(\d+\.\d+)(ms|s)")?),
-        ].into_iter().collect();
+            (
+                "start".to_string(),
+                Regex::new(
+                    r"Preparing stage pipeline_stages=\d+/\d+ stage=(\w+) checkpoint=\d+ target=",
+                )?,
+            ),
+            (
+                "end".to_string(),
+                Regex::new(
+                    r"Finished stage pipeline_stages=\d+/\d+ stage=(\w+) checkpoint=\d+ target=.*",
+                )?,
+            ),
+            (
+                "state_root".to_string(),
+                Regex::new(r"Validated state root.*elapsed=(\d+\.\d+)(ms|s)")?,
+            ),
+        ]
+        .into_iter()
+        .collect();
 
         Ok(LogProcessor {
             regexes,
@@ -132,7 +147,7 @@ mod tests {
     fn test_process_line_end_stage() {
         let mut processor = LogProcessor::new().unwrap();
         let start_line = "2024-06-07T09:05:20.873354Z  INFO Preparing stage pipeline_stages=1/12 stage=Headers checkpoint=20037711 target=None";
-        let end_line = "2024-06-07T09:06:20.873354Z  INFO Finished stage pipeline_stages=1/12 stage=Headers checkpoint=20038569 target=344353 stage_progress=100.00%";
+        let end_line = "2024-06-07T09:06:20.873354Z  INFO Finished stage pipeline_stages=1/12 stage=Headers checkpoint=20038569 target=344353";
 
         processor.process_line(start_line).unwrap();
         processor.process_line(end_line).unwrap();
@@ -194,7 +209,7 @@ mod tests {
         let additional_start_line = "2024-06-07T09:06:00.000000Z  INFO Preparing stage pipeline_stages=1/12 stage=Headers checkpoint=20037711 target=None";
         processor.process_line(additional_start_line).unwrap();
 
-        let additional_end_line = "2024-06-07T09:06:30.000000Z  INFO Finished stage pipeline_stages=1/12 stage=Headers checkpoint=20038569 target=None stage_progress=100.00%";
+        let additional_end_line = "2024-06-07T09:06:30.000000Z  INFO Finished stage pipeline_stages=1/12 stage=Headers checkpoint=20038569 target=None";
         processor.process_line(additional_end_line).unwrap();
 
         // Finalize the last pipeline by pushing it to pipelines
