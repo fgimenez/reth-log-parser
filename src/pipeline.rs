@@ -59,18 +59,33 @@ impl Pipeline {
         for key in keys {
             writeln!(
                 writer,
-                "  Stage {}: {:.2?}",
+                "  Stage {}: {}",
                 key,
-                self.durations.get(key).unwrap()
+                Pipeline::format_duration(self.durations.get(key).unwrap())
             )
             .unwrap();
         }
         writeln!(
             writer,
-            "  Total Pipeline Duration: {:.2?}",
-            self.durations.values().sum::<Duration>()
+            "  Total Pipeline Duration: {}",
+            Pipeline::format_duration(&self.durations.values().cloned().sum())
         )
         .unwrap();
+    }
+
+    fn format_duration(duration: &Duration) -> String {
+        let secs = duration.as_secs();
+        if secs >= 3600 {
+            let hours = secs / 3600;
+            let minutes = (secs % 3600) / 60;
+            format!("{}h {}m", hours, minutes)
+        } else if secs >= 60 {
+            let minutes = secs / 60;
+            let seconds = secs % 60;
+            format!("{}m {}s", minutes, seconds)
+        } else {
+            format!("{}s", secs)
+        }
     }
 }
 
@@ -137,7 +152,27 @@ mod tests {
 
         let output_str = String::from_utf8(output).unwrap();
         let expected_output =
-            "Pipeline 1: \n  Stage 001 - Headers: 60.00s\n  Total Pipeline Duration: 60.00s\n"
+            "Pipeline 1: \n  Stage 001 - Headers: 1m 0s\n  Total Pipeline Duration: 1m 0s\n"
+                .to_string();
+        assert_eq!(expected_output, output_str);
+    }
+
+    #[test]
+    fn test_print_summary_long_stage() {
+        let mut pipeline = Pipeline::new();
+        let stage_name = "Headers";
+        let start_time = SystemTime::now();
+        let end_time = start_time + Duration::from_secs(157326);
+
+        pipeline.record_stage_start(stage_name, start_time);
+        pipeline.record_stage_end(stage_name, end_time).unwrap();
+
+        let mut output = Vec::new();
+        pipeline.print_summary(0, &mut output);
+
+        let output_str = String::from_utf8(output).unwrap();
+        let expected_output =
+            "Pipeline 1: \n  Stage 001 - Headers: 43h 42m\n  Total Pipeline Duration: 43h 42m\n"
                 .to_string();
         assert_eq!(expected_output, output_str);
     }
@@ -160,5 +195,13 @@ mod tests {
         assert_eq!(pipeline.stages.len(), 1);
         assert!(pipeline.stages.contains_key(stage_name));
         assert_eq!(pipeline.stages[stage_name], (first_timestamp, None));
+    }
+
+    #[test]
+    fn test_format_duration() {
+        assert_eq!(Pipeline::format_duration(&Duration::new(59, 0)), "59s");
+        assert_eq!(Pipeline::format_duration(&Duration::new(61, 0)), "1m 1s");
+        assert_eq!(Pipeline::format_duration(&Duration::new(3601, 0)), "1h 0m");
+        assert_eq!(Pipeline::format_duration(&Duration::new(3661, 0)), "1h 1m");
     }
 }
