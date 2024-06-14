@@ -15,7 +15,6 @@ fn main() -> Result<()> {
 
     let mut runner = Runner::builder()
         .with_log_file(log_file)
-        .with_threads(4)
         .with_stdout_writer(stdout_writer)
         .build()?;
 
