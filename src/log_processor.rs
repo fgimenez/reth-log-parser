@@ -104,6 +104,7 @@ impl LogProcessor {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use chrono::{TimeZone, Timelike};
     use std::io::Cursor;
 
     #[test]
@@ -219,5 +220,24 @@ mod tests {
             assert!(output_str.contains(&format!("Stage {}:", stage)));
         }
         assert!(output_str.contains("Total Pipeline Duration:"));
+    }
+
+    #[test]
+    fn test_extract_timestamp() {
+        let processor = LogProcessor::new().unwrap();
+
+        let line = "2024-06-07T09:05:20.873354Z  INFO Preparing stage pipeline_stages=1/12 stage=Headers checkpoint=20037711 target=None";
+        let timestamp = processor.extract_timestamp(line).unwrap();
+        let expected_time = chrono::Utc
+            .with_ymd_and_hms(2024, 6, 7, 9, 5, 20)
+            .unwrap()
+            .with_nanosecond(873_354_000)
+            .unwrap();
+
+        assert_eq!(SystemTime::from(expected_time), timestamp);
+
+        let line = "Invalid log line without a timestamp";
+        let result = processor.extract_timestamp(line);
+        assert!(result.is_err());
     }
 }
