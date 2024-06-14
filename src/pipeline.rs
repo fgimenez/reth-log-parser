@@ -19,7 +19,7 @@ impl Pipeline {
     }
 
     fn enumerated_stage_name(&self, stage_name: &str) -> String {
-        format!("{} - {}", self.stages.len(), stage_name)
+        format!("{:03} - {}", self.stages.len(), stage_name)
     }
 
     pub fn record_stage_start(&mut self, stage_name: &str, timestamp: SystemTime) {
@@ -96,7 +96,7 @@ mod tests {
     fn test_record_stage_end() -> Result<()> {
         let mut pipeline = Pipeline::new();
         let stage_name = "Headers";
-        let name = "1 - Headers";
+        let name = "001 - Headers";
         let start_time = SystemTime::now();
         let end_time = start_time + Duration::from_secs(60); // 1 minute later
 
@@ -137,7 +137,7 @@ mod tests {
 
         let output_str = String::from_utf8(output).unwrap();
         let expected_output =
-            "Pipeline 1: \n  Stage 1 - Headers: 60.00s\n  Total Pipeline Duration: 60.00s\n"
+            "Pipeline 1: \n  Stage 001 - Headers: 60.00s\n  Total Pipeline Duration: 60.00s\n"
                 .to_string();
         assert_eq!(expected_output, output_str);
     }

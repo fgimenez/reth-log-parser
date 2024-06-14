@@ -24,7 +24,7 @@ impl LogProcessor {
             (
                 "end".to_string(),
                 Regex::new(
-                    r"Finished stage pipeline_stages=\d+/\d+ stage=(\w+) checkpoint=\d+ target=.*",
+                    r"Finished stage pipeline_stages=\d+/\d+ stage=(\w+) checkpoint=\d+ target=",
                 )?,
             ),
             (
@@ -159,7 +159,7 @@ mod tests {
             .as_ref()
             .unwrap()
             .durations
-            .contains_key("1 - Headers"));
+            .contains_key("001 - Headers"));
     }
 
     #[test]
@@ -226,7 +226,7 @@ mod tests {
 
         assert!(output_str.contains("Pipeline 1:"));
         for (index, stage) in stages.iter().enumerate() {
-            assert!(output_str.contains(&format!("Stage {} - {}:", index + 1, stage)));
+            assert!(output_str.contains(&format!("Stage {:03} - {}:", index + 1, stage)));
         }
         assert!(output_str.contains("Total Pipeline Duration:"));
     }
