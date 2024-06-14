@@ -3,6 +3,8 @@ use log_parser::runner::Runner;
 use std::{env, io::stdout};
 
 fn main() -> Result<()> {
+    env_logger::init();
+
     let args: Vec<String> = env::args().collect();
     if args.len() != 2 {
         eprintln!("Usage: {} <path_to_log_file>", args[0]);

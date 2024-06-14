@@ -18,8 +18,10 @@ impl Pipeline {
     }
 
     pub fn record_stage_start(&mut self, stage_name: &str, timestamp: SystemTime) {
-        self.stages
-            .insert(stage_name.to_string(), (timestamp, None));
+        if !self.stages.contains_key(stage_name) {
+            self.stages
+                .insert(stage_name.to_string(), (timestamp, None));
+        }
     }
 
     pub fn record_stage_end(&mut self, stage_name: &str, timestamp: SystemTime) -> Result<()> {
@@ -120,5 +122,25 @@ mod tests {
             "Pipeline 1: \n  Stage Headers: 60.00s\n  Total Pipeline Duration: 60.00s\n"
                 .to_string();
         assert_eq!(expected_output, output_str);
+    }
+
+    #[test]
+    fn test_multiple_record_stage_start() {
+        let mut pipeline = Pipeline::new();
+        let stage_name = "Headers";
+        let first_timestamp = SystemTime::now();
+
+        pipeline.record_stage_start(stage_name, first_timestamp);
+
+        assert_eq!(pipeline.stages.len(), 1);
+        assert!(pipeline.stages.contains_key(stage_name));
+        assert_eq!(pipeline.stages[stage_name], (first_timestamp, None));
+
+        let second_timestamp = SystemTime::now();
+        pipeline.record_stage_start(stage_name, second_timestamp);
+
+        assert_eq!(pipeline.stages.len(), 1);
+        assert!(pipeline.stages.contains_key(stage_name));
+        assert_eq!(pipeline.stages[stage_name], (first_timestamp, None));
     }
 }
