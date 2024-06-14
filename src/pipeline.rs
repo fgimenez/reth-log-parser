@@ -1,4 +1,4 @@
-use crate::{stats, time::Formatter};
+use crate::{stats, time::format_duration};
 use eyre::Result;
 use log::debug;
 use std::{
@@ -61,14 +61,14 @@ impl Pipeline {
                 writer,
                 "  Stage {}: {}",
                 key,
-                Formatter::format_duration(self.durations.get(key).unwrap())
+                format_duration(self.durations.get(key).unwrap())
             )
             .unwrap();
         }
         writeln!(
             writer,
             "  Total Pipeline Duration: {}",
-            Formatter::format_duration(&self.durations.values().cloned().sum())
+            format_duration(&self.durations.values().cloned().sum())
         )
         .unwrap();
     }

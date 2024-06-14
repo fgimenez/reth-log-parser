@@ -1,10 +1,10 @@
-use crate::{pipeline::Pipeline, time::Formatter};
+use crate::{
+    pipeline::Pipeline,
+    time::{extract_timestamp, format_duration},
+};
 use eyre::Result;
 use regex::Regex;
-use std::{
-    collections::HashMap,
-    time::{Duration, SystemTime},
-};
+use std::{collections::HashMap, time::Duration};
 
 pub struct LogProcessor {
     regexes: HashMap<String, Regex>,
@@ -45,7 +45,7 @@ impl LogProcessor {
     pub fn process_line(&mut self, line: &str) -> Result<()> {
         if let Some(start_caps) = self.regexes["start"].captures(line) {
             let stage_name = start_caps.get(1).unwrap().as_str();
-            let timestamp = self.extract_timestamp(line)?;
+            let timestamp = extract_timestamp(line)?;
 
             if self.current_pipeline.is_none() || self.is_first_stage(stage_name) {
                 if let Some(pipeline) = self.current_pipeline.take() {
@@ -61,7 +61,7 @@ impl LogProcessor {
 
         if let Some(end_caps) = self.regexes["end"].captures(line) {
             let stage_name = end_caps.get(1).unwrap().as_str();
-            let timestamp = self.extract_timestamp(line)?;
+            let timestamp = extract_timestamp(line)?;
             let current_pipeline = &mut self.current_pipeline;
             if let Some(ref mut pipeline) = current_pipeline {
                 pipeline.record_stage_end(stage_name, timestamp)?;
@@ -88,17 +88,6 @@ impl LogProcessor {
         stage_name == "Headers"
     }
 
-    fn extract_timestamp(&self, line: &str) -> Result<SystemTime> {
-        let timestamp_str = Regex::new(r"(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{6}Z)")?
-            .captures(line)
-            .and_then(|caps| caps.get(1))
-            .map(|m| m.as_str())
-            .ok_or_else(|| eyre::eyre!("Failed to extract timestamp"))?;
-
-        let dt = timestamp_str.parse::<chrono::DateTime<chrono::Utc>>()?;
-        Ok(SystemTime::from(dt))
-    }
-
     pub fn print_summary<W: std::io::Write>(&self, writer: &mut W) {
         let pipelines = &self.pipelines;
         let mut total_duration = Duration::new(0, 0);
@@ -111,7 +100,7 @@ impl LogProcessor {
         writeln!(
             writer,
             "Total Aggregate Duration: {}",
-            Formatter::format_duration(&total_duration)
+            format_duration(&total_duration)
         )
         .unwrap();
     }
@@ -120,7 +109,6 @@ impl LogProcessor {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use chrono::{TimeZone, Timelike};
     use std::io::Cursor;
 
     #[test]
@@ -232,24 +220,5 @@ mod tests {
             assert!(output_str.contains(&format!("Stage {:03} - {}:", index + 1, stage)));
         }
         assert!(output_str.contains("Total Pipeline Duration:"));
-    }
-
-    #[test]
-    fn test_extract_timestamp() {
-        let processor = LogProcessor::new().unwrap();
-
-        let line = "2024-06-07T09:05:20.873354Z  INFO Preparing stage pipeline_stages=1/12 stage=Headers checkpoint=20037711 target=None";
-        let timestamp = processor.extract_timestamp(line).unwrap();
-        let expected_time = chrono::Utc
-            .with_ymd_and_hms(2024, 6, 7, 9, 5, 20)
-            .unwrap()
-            .with_nanosecond(873_354_000)
-            .unwrap();
-
-        assert_eq!(SystemTime::from(expected_time), timestamp);
-
-        let line = "Invalid log line without a timestamp";
-        let result = processor.extract_timestamp(line);
-        assert!(result.is_err());
     }
 }
