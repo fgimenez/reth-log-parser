@@ -12,7 +12,6 @@ fn main() -> Result<()> {
     }
 
     let log_file = &args[1];
-
     let stdout_writer = stdout();
 
     let mut runner = Runner::builder()

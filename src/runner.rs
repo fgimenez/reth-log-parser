@@ -26,7 +26,7 @@ impl<W: Write> Runner<W> {
         reader.lines().for_each(|line| {
             if let Ok(line) = line {
                 processor.process_line(&line).unwrap_or_else(|err| {
-                    eprintln!("Error processing line: {}", err);
+                    eprintln!("Error processing line {}: {}", line, err);
                 });
             }
         });
