@@ -2,7 +2,7 @@ use log_parser::runner::Runner;
 use std::{io::Cursor, path::Path};
 
 #[test]
-fn test_print_summary() {
+fn test_print_summary_e2e() {
     let log_file_path = concat!(
         env!("CARGO_MANIFEST_DIR"),
         "/tests/data/log-print-summary.txt"
@@ -21,8 +21,6 @@ fn test_print_summary() {
     let actual_output = runner.stdout_writer().clone().into_inner();
     let actual_output_str = String::from_utf8(actual_output).unwrap();
     let expected_output = r###"Pipeline 1:
-  Total Pipeline Duration: 0s
-Pipeline 2:
   Stage 001 - Headers: 10m 40s
   Stage 002 - Bodies: 2h 32m
   Stage 003 - SenderRecovery: 1h 37m

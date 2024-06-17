@@ -38,32 +38,28 @@ impl LogProcessor {
         Ok(LogProcessor {
             regexes,
             pipelines: Vec::new(),
-            current_pipeline: Some(Pipeline::new()),
+            current_pipeline: None,
         })
     }
 
     pub fn process_line(&mut self, line: &str) -> Result<()> {
         if let Some(start_caps) = self.regexes["start"].captures(line) {
             let stage_name = start_caps.get(1).unwrap().as_str();
-            let timestamp = extract_timestamp(line)?;
 
             if self.current_pipeline.is_none() || self.is_first_stage(stage_name) {
-                if let Some(pipeline) = self.current_pipeline.take() {
-                    self.pipelines.push(pipeline);
-                }
-                self.current_pipeline = Some(Pipeline::new());
+                self.init_pipeline();
             }
 
             if let Some(ref mut pipeline) = self.current_pipeline {
+                let timestamp = extract_timestamp(line)?;
                 pipeline.record_stage_start(stage_name, timestamp);
             }
         }
 
         if let Some(end_caps) = self.regexes["end"].captures(line) {
-            let stage_name = end_caps.get(1).unwrap().as_str();
-            let timestamp = extract_timestamp(line)?;
-            let current_pipeline = &mut self.current_pipeline;
-            if let Some(ref mut pipeline) = current_pipeline {
+            if let Some(ref mut pipeline) = self.current_pipeline {
+                let stage_name = end_caps.get(1).unwrap().as_str();
+                let timestamp = extract_timestamp(line)?;
                 pipeline.record_stage_end(stage_name, timestamp)?;
             }
         }
@@ -74,6 +70,10 @@ impl LogProcessor {
                 if unit.as_str() == "ms" {
                     elapsed /= 1000.0;
                 }
+                if self.current_pipeline.is_none() {
+                    self.init_pipeline();
+                }
+
                 let current_pipeline = &mut self.current_pipeline;
                 if let Some(ref mut pipeline) = current_pipeline {
                     pipeline.update_stats("state_root", elapsed);
@@ -103,6 +103,13 @@ impl LogProcessor {
             format_duration(&total_duration)
         )
         .unwrap();
+    }
+
+    fn init_pipeline(&mut self) {
+        if let Some(pipeline) = self.current_pipeline.take() {
+            self.pipelines.push(pipeline);
+        }
+        self.current_pipeline = Some(Pipeline::new());
     }
 }
 
