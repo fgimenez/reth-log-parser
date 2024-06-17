@@ -51,7 +51,7 @@ impl Pipeline {
     }
 
     pub fn print_summary<W: std::io::Write>(&self, index: usize, writer: &mut W) {
-        writeln!(writer, "Pipeline {}: ", index + 1).unwrap();
+        writeln!(writer, "Pipeline {}:", index + 1).unwrap();
 
         let mut keys: Vec<&String> = self.durations.keys().collect();
         keys.sort();
@@ -137,7 +137,7 @@ mod tests {
 
         let output_str = String::from_utf8(output).unwrap();
         let expected_output =
-            "Pipeline 1: \n  Stage 001 - Headers: 1m 0s\n  Total Pipeline Duration: 1m 0s\n"
+            "Pipeline 1:\n  Stage 001 - Headers: 1m 0s\n  Total Pipeline Duration: 1m 0s\n"
                 .to_string();
         assert_eq!(expected_output, output_str);
     }
@@ -157,7 +157,7 @@ mod tests {
 
         let output_str = String::from_utf8(output).unwrap();
         let expected_output =
-            "Pipeline 1: \n  Stage 001 - Headers: 43h 42m\n  Total Pipeline Duration: 43h 42m\n"
+            "Pipeline 1:\n  Stage 001 - Headers: 43h 42m\n  Total Pipeline Duration: 43h 42m\n"
                 .to_string();
         assert_eq!(expected_output, output_str);
     }

@@ -42,6 +42,10 @@ impl<W: Write> Runner<W> {
 
         Ok(())
     }
+
+    pub fn stdout_writer(&self) -> &W {
+        &self.stdout_writer
+    }
 }
 
 pub struct RunnerBuilder<W: Write> {
