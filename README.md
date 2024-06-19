@@ -7,7 +7,7 @@ Parses reth's logs and shows several stats.
 Just pass the path to the log file:
 
 ```shell
-$ RUST_LOG=debug cargo run -- ./reth.log
+$ cargo run -- ./reth.log
 Pipeline 1:
 Stage 001 - Headers: 24m 11s
 Stage 002 - Bodies: 2h 26m
