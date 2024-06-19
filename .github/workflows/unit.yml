@@ -26,7 +26,4 @@ jobs:
       - uses: taiki-e/install-action@nextest
       - name: Run tests
         run: |
-          cargo nextest run \
-            --locked \
-            --workspace \
-            -E "!kind(test)"
+          cargo nextest run --locked
