@@ -1,0 +1,15 @@
+Pipeline 1:
+  Stage 001 - Headers: 10m 40s
+  Stage 002 - Bodies: 2h 32m
+  Stage 003 - SenderRecovery: 1h 37m
+  Stage 004 - Execution: 43h 42m
+  Stage 005 - MerkleUnwind: 0s
+  Stage 006 - AccountHashing: 2m 59s
+  Stage 007 - StorageHashing: 46m 23s
+  Stage 008 - MerkleExecute: 47m 12s
+  Stage 009 - TransactionLookup: 32m 44s
+  Stage 010 - IndexStorageHistory: 3h 32m
+  Stage 011 - IndexAccountHistory: 1h 38m
+  Stage 012 - Finish: 0s
+  Total Pipeline Duration: 55h 23m
+Total Aggregate Duration: 55h 23m
