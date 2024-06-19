@@ -1,9 +1,11 @@
 use crate::log_processor::LogProcessor;
 use eyre::Result;
+use log::{error, info};
 use std::{
     fs::File,
     io::{BufRead, BufReader, Write},
     path::Path,
+    time::Instant,
 };
 
 pub struct Runner<W: Write> {
@@ -21,15 +23,32 @@ impl<W: Write> Runner<W> {
         let file = File::open(path)?;
         let reader = BufReader::new(file);
 
+        let total_lines = {
+            let file = File::open(path)?;
+            let reader = BufReader::new(file);
+            reader.lines().count()
+        };
+
         let mut processor = LogProcessor::new()?;
 
-        reader.lines().for_each(|line| {
+        let start_time = Instant::now();
+        for (index, line) in reader.lines().enumerate() {
             if let Ok(line) = line {
                 processor.process_line(&line).unwrap_or_else(|err| {
-                    eprintln!("Error processing line {}: {}", line, err);
+                    error!("Error processing line {line}: {err}");
                 });
             }
-        });
+            let lines_processed = index + 1;
+
+            if lines_processed % 5000 == 0 || lines_processed == total_lines {
+                let percentage = (lines_processed as f64 / total_lines as f64) * 100.0;
+                let elapsed_time = start_time.elapsed().as_secs();
+                info!(
+                    "Processed {} lines out of {} ({:.2}%) in {} seconds",
+                    lines_processed, total_lines, percentage, elapsed_time
+                );
+            }
+        }
 
         // Capture the last pipeline if it was still in progress
         let pipelines = &mut processor.pipelines;
