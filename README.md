@@ -4,7 +4,9 @@ Parses reth's logs and shows several stats.
 
 # Execution
 
-Just pass the path to the log file:
+Currently running the tool shows the time taken by reth for doing an historical
+sync, specifying the time spent on pipelines and the stages on each of them. You
+need to specify the path to the log file on the command line invocation:
 
 ```shell
 $ cargo run -- ./reth.log
