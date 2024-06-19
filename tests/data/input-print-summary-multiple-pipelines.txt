@@ -1,0 +1,85 @@
+Jun 17 08:24:09 reth4 reth-mainnet[889075]: 2024-06-17T08:24:09.327255Z  INFO Preparing stage pipeline_stages=1/12 stage=Headers checkpoint=0 target=None
+Jun 17 08:31:35 reth4 reth-mainnet[889075]: 2024-06-17T08:31:35.724101Z  INFO Finished stage pipeline_stages=1/12 stage=Headers checkpoint=20110161 target=None stage_progress=100.00%
+Jun 17 10:30:37 reth4 reth-mainnet[956430]: 2024-06-17T10:30:37.153170Z  INFO Preparing stage pipeline_stages=2/12 stage=Bodies checkpoint=0 target=20110636
+Jun 17 08:31:37 reth4 reth-mainnet[889075]: 2024-06-17T08:31:37.211639Z  INFO Preparing stage pipeline_stages=2/12 stage=Bodies checkpoint=1000 target=20110161
+Jun 17 08:31:46 reth4 reth-mainnet[889075]: 2024-06-17T08:31:46.938080Z  INFO Status connected_peers=10 freelist=4 stage=Bodies checkpoint=1000 target=20110161 stage_progress=0.00%
+Jun 17 08:31:58 reth4 reth-mainnet[889075]: 2024-06-17T08:31:58.641722Z  INFO Executing stage pipeline_stages=2/12 stage=Bodies checkpoint=1000 target=20110161
+Jun 17 08:31:58 reth4 reth-mainnet[889075]: 2024-06-17T08:31:58.644628Z  INFO Committed stage progress pipeline_stages=2/12 stage=Bodies checkpoint=2000 target=20110161 stage_progress=0.00%
+Jun 17 08:31:58 reth4 reth-mainnet[889075]: 2024-06-17T08:31:58.646311Z  INFO Preparing stage pipeline_stages=2/12 stage=Bodies checkpoint=2000 target=20110161
+Jun 17 08:31:58 reth4 reth-mainnet[889075]: 2024-06-17T08:31:58.669744Z  INFO Executing stage pipeline_stages=2/12 stage=Bodies checkpoint=2000 target=20110161
+Jun 17 08:31:58 reth4 reth-mainnet[889075]: 2024-06-17T08:31:58.671644Z  INFO Committed stage progress pipeline_stages=2/12 stage=Bodies checkpoint=3000 target=20110161 stage_progress=0.01%
+Jun 17 12:57:13 reth4 reth-mainnet[956430]: 2024-06-17T12:57:13.664569Z  INFO Finished stage pipeline_stages=2/12 stage=Bodies checkpoint=20110636 target=20110636 stage_progress=100.00%
+Jun 17 12:57:13 reth4 reth-mainnet[956430]: 2024-06-17T12:57:13.691634Z  INFO Preparing stage pipeline_stages=3/12 stage=SenderRecovery checkpoint=0 target=20110636
+Jun 17 14:02:32 reth4 reth-mainnet[956430]: 2024-06-17T14:02:32.829116Z  INFO Finished stage pipeline_stages=3/12 stage=SenderRecovery checkpoint=20110636 target=20110636 stage_progress=100.00% stage_eta=unknown
+Jun 17 14:02:32 reth4 reth-mainnet[956430]: 2024-06-17T14:02:32.958613Z  INFO Preparing stage pipeline_stages=4/12 stage=Execution checkpoint=0 target=20110636
+Jun 19 07:16:45 reth4 reth-mainnet[956430]: 2024-06-19T07:16:45.309362Z  INFO Finished stage pipeline_stages=4/12 stage=Execution checkpoint=20110636 target=20110636 stage_progress=100.00%
+Jun 19 07:16:48 reth4 reth-mainnet[956430]: 2024-06-19T07:16:48.499397Z  INFO Status connected_peers=131 freelist=2425505 latest_block=0
+Jun 19 07:16:48 reth4 reth-mainnet[956430]: 2024-06-19T07:16:48.988194Z  INFO Preparing stage pipeline_stages=5/12 stage=MerkleUnwind checkpoint=0 target=20110636
+Jun 19 07:16:48 reth4 reth-mainnet[956430]: 2024-06-19T07:16:48.988305Z  INFO Finished stage pipeline_stages=5/12 stage=MerkleUnwind checkpoint=20110636 target=20110636
+Jun 19 07:16:48 reth4 reth-mainnet[956430]: 2024-06-19T07:16:48.988454Z  INFO Preparing stage pipeline_stages=6/12 stage=AccountHashing checkpoint=0 target=20110636
+Jun 19 07:19:26 reth4 reth-mainnet[956430]: 2024-06-19T07:19:26.818328Z  INFO Finished stage pipeline_stages=6/12 stage=AccountHashing checkpoint=20110636 target=20110636 stage_progress=100.00%
+Jun 19 07:19:30 reth4 reth-mainnet[956430]: 2024-06-19T07:19:30.000123Z  INFO Preparing stage pipeline_stages=7/12 stage=StorageHashing checkpoint=0 target=20110636
+Jun 19 07:49:32 reth4 reth-mainnet[956430]: 2024-06-19T07:49:32.966580Z  INFO Finished stage pipeline_stages=7/12 stage=StorageHashing checkpoint=20110636 target=20110636 stage_progress=100.00%
+Jun 19 07:49:33 reth4 reth-mainnet[956430]: 2024-06-19T07:49:33.000891Z  INFO Preparing stage pipeline_stages=8/12 stage=MerkleExecute checkpoint=0 target=20110636
+Jun 19 08:13:45 reth4 reth-mainnet[956430]: 2024-06-19T08:13:45.049492Z  INFO Finished stage pipeline_stages=8/12 stage=MerkleExecute checkpoint=20110636 target=20110636 stage_progress=100.00% stage_eta=unknown
+Jun 19 08:13:45 reth4 reth-mainnet[956430]: 2024-06-19T08:13:45.054349Z  INFO Updating transaction lookup tx_range=0..=20110636
+Jun 19 08:13:45 reth4 reth-mainnet[956430]: 2024-06-19T08:13:45.054366Z  INFO Preparing stage pipeline_stages=9/12 stage=TransactionLookup checkpoint=0 target=20110636
+Jun 19 08:39:36 reth4 reth-mainnet[956430]: 2024-06-19T08:39:36.305507Z  INFO Finished stage pipeline_stages=9/12 stage=TransactionLookup checkpoint=20110636 target=20110636 stage_progress=100.00%
+Jun 19 08:39:38 reth4 reth-mainnet[956430]: 2024-06-19T08:39:38.576796Z  INFO Preparing stage pipeline_stages=10/12 stage=IndexStorageHistory checkpoint=0 target=20110636
+Jun 19 08:39:49 reth4 reth-mainnet[956430]: 2024-06-19T08:39:49.288779Z  INFO Finished stage pipeline_stages=10/12 stage=IndexStorageHistory checkpoint=20110636 target=20110636
+Jun 19 08:39:49 reth4 reth-mainnet[956430]: 2024-06-19T08:39:49.462065Z  INFO Preparing stage pipeline_stages=11/12 stage=IndexAccountHistory checkpoint=0 target=20110636
+Jun 19 08:39:53 reth4 reth-mainnet[956430]: 2024-06-19T08:39:53.448196Z  INFO Finished stage pipeline_stages=11/12 stage=IndexAccountHistory checkpoint=20110636 target=20110636
+Jun 19 08:39:53 reth4 reth-mainnet[956430]: 2024-06-19T08:39:53.543110Z  INFO Preparing stage pipeline_stages=12/12 stage=Finish checkpoint=0 target=20110636
+Jun 19 08:39:53 reth4 reth-mainnet[956430]: 2024-06-19T08:39:53.543178Z  INFO Finished stage pipeline_stages=12/12 stage=Finish checkpoint=20110636 target=20110636
+Jun 19 08:39:53 reth4 reth-mainnet[956430]: 2024-06-19T08:39:53.549242Z  INFO Preparing stage pipeline_stages=1/12 stage=Headers checkpoint=20110636 target=None
+Jun 19 08:39:56 reth4 reth-mainnet[956430]: 2024-06-19T08:39:56.383685Z  INFO Finished stage pipeline_stages=1/12 stage=Headers checkpoint=20124564 target=None stage_progress=100.00%
+Jun 19 08:39:56 reth4 reth-mainnet[956430]: 2024-06-19T08:39:56.521721Z  INFO Preparing stage pipeline_stages=2/12 stage=Bodies checkpoint=20110636 target=20124564
+Jun 19 08:40:06 reth4 reth-mainnet[956430]: 2024-06-19T08:40:06.594944Z  INFO Finished stage pipeline_stages=2/12 stage=Bodies checkpoint=20124564 target=20124564 stage_progress=100.00%
+Jun 19 08:40:06 reth4 reth-mainnet[956430]: 2024-06-19T08:40:06.628920Z  INFO Preparing stage pipeline_stages=3/12 stage=SenderRecovery checkpoint=20110636 target=20124564
+Jun 19 08:40:10 reth4 reth-mainnet[956430]: 2024-06-19T08:40:10.164061Z  INFO Finished stage pipeline_stages=3/12 stage=SenderRecovery checkpoint=20124564 target=20124564 stage_progress=100.00%
+Jun 19 08:40:10 reth4 reth-mainnet[956430]: 2024-06-19T08:40:10.257509Z  INFO Preparing stage pipeline_stages=4/12 stage=Execution checkpoint=20110636 target=20124564
+Jun 19 08:45:28 reth4 reth-mainnet[956430]: 2024-06-19T08:45:28.301470Z  INFO Finished stage pipeline_stages=4/12 stage=Execution checkpoint=20124564 target=20124564 stage_progress=100.00%
+Jun 19 08:45:31 reth4 reth-mainnet[956430]: 2024-06-19T08:45:31.229940Z  INFO Stage is always skipped
+Jun 19 08:45:31 reth4 reth-mainnet[956430]: 2024-06-19T08:45:31.229942Z  INFO Preparing stage pipeline_stages=5/12 stage=MerkleUnwind checkpoint=20110636 target=20124564
+Jun 19 08:45:31 reth4 reth-mainnet[956430]: 2024-06-19T08:45:31.230013Z  INFO Finished stage pipeline_stages=5/12 stage=MerkleUnwind checkpoint=20124564 target=20124564
+Jun 19 08:45:31 reth4 reth-mainnet[956430]: 2024-06-19T08:45:31.230143Z  INFO Preparing stage pipeline_stages=6/12 stage=AccountHashing checkpoint=20110636 target=20124564
+Jun 19 08:46:06 reth4 reth-mainnet[956430]: 2024-06-19T08:46:06.678528Z  INFO Finished stage pipeline_stages=6/12 stage=AccountHashing checkpoint=20124564 target=20124564 stage_progress=100.00%
+Jun 19 08:46:07 reth4 reth-mainnet[956430]: 2024-06-19T08:46:07.307461Z  INFO Preparing stage pipeline_stages=7/12 stage=StorageHashing checkpoint=20110636 target=20124564
+Jun 19 08:47:10 reth4 reth-mainnet[956430]: 2024-06-19T08:47:10.471109Z  INFO Finished stage pipeline_stages=7/12 stage=StorageHashing checkpoint=20124564 target=20124564 stage_progress=100.00%
+Jun 19 08:47:13 reth4 reth-mainnet[956430]: 2024-06-19T08:47:13.498161Z  INFO Status connected_peers=132 freelist=748277 latest_block=20110636
+Jun 19 08:47:13 reth4 reth-mainnet[956430]: 2024-06-19T08:47:13.548999Z  INFO Preparing stage pipeline_stages=8/12 stage=MerkleExecute checkpoint=20110636 target=20124564
+Jun 19 09:20:21 reth4 reth-mainnet[956430]: 2024-06-19T09:20:21.271648Z  INFO Finished stage pipeline_stages=8/12 stage=MerkleExecute checkpoint=20124564 target=20124564 stage_progress=100.00% stage_eta=unknown
+Jun 19 09:20:21 reth4 reth-mainnet[956430]: 2024-06-19T09:20:21.277756Z  INFO Updating transaction lookup tx_range=20110636..=20124564
+Jun 19 09:20:21 reth4 reth-mainnet[956430]: 2024-06-19T09:20:21.277763Z  INFO Preparing stage pipeline_stages=9/12 stage=TransactionLookup checkpoint=20110636 target=20124564
+Jun 19 09:20:45 reth4 reth-mainnet[956430]: 2024-06-19T09:20:45.776436Z  INFO Finished stage pipeline_stages=9/12 stage=TransactionLookup checkpoint=20124564 target=20124564 stage_progress=100.00%
+Jun 19 09:20:51 reth4 reth-mainnet[956430]: 2024-06-19T09:20:51.310898Z  INFO Collecting indices first_sync=false
+Jun 19 09:20:51 reth4 reth-mainnet[956430]: 2024-06-19T09:20:51.310899Z  INFO Preparing stage pipeline_stages=10/12 stage=IndexStorageHistory checkpoint=20110636 target=20124564
+Jun 19 09:20:55 reth4 reth-mainnet[956430]: 2024-06-19T09:20:55.142528Z  INFO Finished stage pipeline_stages=10/12 stage=IndexStorageHistory checkpoint=20124564 target=20124564
+Jun 19 09:20:55 reth4 reth-mainnet[956430]: 2024-06-19T09:20:55.587916Z  INFO Preparing stage pipeline_stages=11/12 stage=IndexAccountHistory checkpoint=20110636 target=20124564
+Jun 19 09:20:56 reth4 reth-mainnet[956430]: 2024-06-19T09:20:56.999509Z  INFO Finished stage pipeline_stages=11/12 stage=IndexAccountHistory checkpoint=20124564 target=20124564
+Jun 19 09:20:57 reth4 reth-mainnet[956430]: 2024-06-19T09:20:57.096365Z  INFO Preparing stage pipeline_stages=12/12 stage=Finish checkpoint=20110636 target=20124564
+Jun 19 09:20:57 reth4 reth-mainnet[956430]: 2024-06-19T09:20:57.096406Z  INFO Finished stage pipeline_stages=12/12 stage=Finish checkpoint=20124564 target=20124564
+Jun 19 09:20:57 reth4 reth-mainnet[956430]: 2024-06-19T09:20:57.097326Z  INFO Preparing stage pipeline_stages=1/12 stage=Headers checkpoint=20124564 target=None
+Jun 19 09:20:57 reth4 reth-mainnet[956430]: 2024-06-19T09:20:57.131904Z  INFO Finished stage pipeline_stages=1/12 stage=Headers checkpoint=20124788 target=None stage_progress=100.00%
+Jun 19 09:20:57 reth4 reth-mainnet[956430]: 2024-06-19T09:20:57.135939Z  INFO Preparing stage pipeline_stages=2/12 stage=Bodies checkpoint=20124564 target=20124788
+Jun 19 09:20:57 reth4 reth-mainnet[956430]: 2024-06-19T09:20:57.774582Z  INFO Finished stage pipeline_stages=2/12 stage=Bodies checkpoint=20124788 target=20124788 stage_progress=100.00%
+Jun 19 09:20:57 reth4 reth-mainnet[956430]: 2024-06-19T09:20:57.804929Z  INFO Preparing stage pipeline_stages=3/12 stage=SenderRecovery checkpoint=20124564 target=20124788
+Jun 19 09:20:57 reth4 reth-mainnet[956430]: 2024-06-19T09:20:57.878848Z  INFO Finished stage pipeline_stages=3/12 stage=SenderRecovery checkpoint=20124788 target=20124788 stage_progress=100.00%
+Jun 19 09:20:57 reth4 reth-mainnet[956430]: 2024-06-19T09:20:57.880324Z  INFO Preparing stage pipeline_stages=4/12 stage=Execution checkpoint=20124564 target=20124788
+Jun 19 09:21:02 reth4 reth-mainnet[956430]: 2024-06-19T09:21:02.276811Z  INFO Finished stage pipeline_stages=4/12 stage=Execution checkpoint=20124788 target=20124788 stage_progress=100.00%
+Jun 19 09:21:02 reth4 reth-mainnet[956430]: 2024-06-19T09:21:02.726094Z  INFO Preparing stage pipeline_stages=5/12 stage=MerkleUnwind checkpoint=20124564 target=20124788
+Jun 19 09:21:02 reth4 reth-mainnet[956430]: 2024-06-19T09:21:02.726207Z  INFO Finished stage pipeline_stages=5/12 stage=MerkleUnwind checkpoint=20124788 target=20124788
+Jun 19 09:21:02 reth4 reth-mainnet[956430]: 2024-06-19T09:21:02.726397Z  INFO Preparing stage pipeline_stages=6/12 stage=AccountHashing checkpoint=20124564 target=20124788
+Jun 19 09:21:02 reth4 reth-mainnet[956430]: 2024-06-19T09:21:02.902515Z  INFO Finished stage pipeline_stages=6/12 stage=AccountHashing checkpoint=20124788 target=20124788 stage_progress=100.00%
+Jun 19 09:21:03 reth4 reth-mainnet[956430]: 2024-06-19T09:21:03.066856Z  INFO Preparing stage pipeline_stages=7/12 stage=StorageHashing checkpoint=20124564 target=20124788
+Jun 19 09:21:03 reth4 reth-mainnet[956430]: 2024-06-19T09:21:03.398070Z  INFO Finished stage pipeline_stages=7/12 stage=StorageHashing checkpoint=20124788 target=20124788 stage_progress=100.00%
+Jun 19 09:21:03 reth4 reth-mainnet[956430]: 2024-06-19T09:21:03.681389Z  INFO Preparing stage pipeline_stages=8/12 stage=MerkleExecute checkpoint=20124564 target=20124788
+Jun 19 09:21:08 reth4 reth-mainnet[956430]: 2024-06-19T09:21:08.124342Z  INFO Finished stage pipeline_stages=8/12 stage=MerkleExecute checkpoint=20124788 target=20124788 stage_progress=100.00%
+Jun 19 09:21:08 reth4 reth-mainnet[956430]: 2024-06-19T09:21:08.845168Z  INFO Preparing stage pipeline_stages=9/12 stage=TransactionLookup checkpoint=20124564 target=20124788
+Jun 19 09:21:09 reth4 reth-mainnet[956430]: 2024-06-19T09:21:09.146783Z  INFO Finished stage pipeline_stages=9/12 stage=TransactionLookup checkpoint=20124788 target=20124788 stage_progress=100.00%
+Jun 19 09:21:09 reth4 reth-mainnet[956430]: 2024-06-19T09:21:09.542895Z  INFO Preparing stage pipeline_stages=10/12 stage=IndexStorageHistory checkpoint=20124564 target=20124788
+Jun 19 09:21:09 reth4 reth-mainnet[956430]: 2024-06-19T09:21:09.779347Z  INFO Finished stage pipeline_stages=10/12 stage=IndexStorageHistory checkpoint=20124788 target=20124788
+Jun 19 09:21:09 reth4 reth-mainnet[956430]: 2024-06-19T09:21:09.893442Z  INFO Preparing stage pipeline_stages=11/12 stage=IndexAccountHistory checkpoint=20124564 target=20124788
+Jun 19 09:21:09 reth4 reth-mainnet[956430]: 2024-06-19T09:21:09.994897Z  INFO Finished stage pipeline_stages=11/12 stage=IndexAccountHistory checkpoint=20124788 target=20124788
+Jun 19 09:21:10 reth4 reth-mainnet[956430]: 2024-06-19T09:21:10.052202Z  INFO Preparing stage pipeline_stages=12/12 stage=Finish checkpoint=20124564 target=20124788
+Jun 19 09:21:10 reth4 reth-mainnet[956430]: 2024-06-19T09:21:10.052225Z  INFO Finished stage pipeline_stages=12/12 stage=Finish checkpoint=20124788 target=20124788

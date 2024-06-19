@@ -7,6 +7,10 @@ use std::{fs::File, io::Cursor, io::Read, path::Path};
     "/tests/data/input-print-summary-basic.txt",
     "/tests/data/output-print-summary-basic.txt"
 )]
+#[case(
+    "/tests/data/input-print-summary-multiple-pipelines.txt",
+    "/tests/data/output-print-summary-multiple-pipelines.txt"
+)]
 fn test_e2e_print_summary(#[case] input_file_path: &str, #[case] expected_output_path: &str) {
     let log_file_path = format!("{}{}", env!("CARGO_MANIFEST_DIR"), input_file_path);
     let stdout_writer: Cursor<Vec<u8>> = Cursor::new(Vec::new());
