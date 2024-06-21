@@ -1,7 +1,7 @@
 #!/bin/bash
 
-BENCHES_ID=${1:-reth-1.0-rc1}
-OUTPUT_BASE_PATH=${2:-/mnt/data/cryo}
+BENCHES_ID="reth-1.0-rc1"
+OUTPUT_BASE_PATH="/mnt/data/cryo"
 
 run_bench() {
     local bench_name=${1}
@@ -46,6 +46,24 @@ run_bench_geth_calls(){
 }
 
 main(){
+    # Parse named arguments
+    while [[ $# -gt 0 ]]; do
+        case $1 in
+            --benches-id)
+                BENCHES_ID="$2"
+                shift 2
+                ;;
+            --output-base-path)
+                OUTPUT_BASE_PATH="$2"
+                shift 2
+                ;;
+            *)
+                echo "Unknown parameter passed: $1"
+                exit 1
+                ;;
+        esac
+    done
+
     run_bench_blocks_to_tip
     run_bench_blocks_range
     run_bench_tx_range1
